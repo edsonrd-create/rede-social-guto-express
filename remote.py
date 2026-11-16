@@ -10,7 +10,7 @@ from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
 from mcp.server.auth.settings import AuthSettings, ClientRegistrationOptions, RevocationOptions
 from mcp.server.transport_security import TransportSecuritySettings
 from owner_auth import OwnerOAuth, Store, matches
-from meta_login import InstagramLogin
+from meta_login import configured_login
 from server import mcp, queue, owner, store
 
 logging.getLogger('httpx').setLevel(logging.WARNING)
@@ -19,7 +19,7 @@ base=os.environ['PUBLIC_BASE_URL']
 
 
 def login():
-    return InstagramLogin(store,base,os.environ['META_APP_ID'],os.environ['META_APP_SECRET'],os.environ['META_GRAPH_VERSION'])
+    return configured_login(store,base,os.environ['META_APP_ID'],os.environ['META_APP_SECRET'],os.environ['META_GRAPH_VERSION'])
 
 
 def page(body,status=200):
