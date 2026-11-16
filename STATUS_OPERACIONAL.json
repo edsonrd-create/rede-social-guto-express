@@ -1,9 +1,9 @@
 {
   "account": "gutoexpress",
   "ready": false,
-  "deployed_commit": "a4eb0becb188f03b20185787c8e9c4ea7fb6eba0",
+  "deployed_commit": "a9360cb67ba6584e0773be521271053afc4eb400",
   "deployment_verified": true,
-  "local_tests_passed": 38,
+  "local_tests_passed": 45,
   "checks": {
     "meta_authorized": false,
     "chatgpt_plugin_linked": false,
@@ -18,10 +18,13 @@
     "verified_at": null
   },
   "blockers": [
-    "Autenticação do proprietário na Meta pendente",
-    "Configurar app Meta e autorizar conta profissional",
-    "Vincular plugin próprio ao ChatGPT com callback OAuth exato",
-    "Revisar materiais oficiais e validar criação e publicação agendada"
+    "Configurar META_APP_SECRET diretamente no Railway e confirmar callback na Meta",
+    "Autorizar @gutoexpress no login unificado",
+    "Vincular plugin ao ChatGPT com callback OAuth exato",
+    "Revisar materiais oficiais e confirmar criação e publicação agendada"
   ],
-  "completion_rule": "ready=true somente após todas as verificações reais, evidências e confirmação de uma publicação autorizada; testes simulados e healthcheck não bastam"
+  "completion_rule": "ready=true somente após todas as verificações reais, evidências e confirmação de uma publicação autorizada; testes simulados e healthcheck não bastam",
+  "meta_app_id": "4841713669443386",
+  "meta_config_id": "2135916773978596",
+  "meta_login_mode": "unified"
 }
