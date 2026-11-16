@@ -1,0 +1,6 @@
+mcp==1.29.0
+httpx==0.28.1
+Pillow==13.0.0
+cryptography==50.0.0
+uvicorn==0.52.1
+python-multipart==0.0.32
