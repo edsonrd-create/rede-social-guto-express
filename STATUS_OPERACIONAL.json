@@ -1,7 +1,7 @@
 {
   "account": "gutoexpress",
   "ready": false,
-  "deployed_commit": "a9360cb67ba6584e0773be521271053afc4eb400",
+  "deployed_commit": "b4b5792532974d07e25db76baab5460e4443e79b",
   "deployment_verified": true,
   "local_tests_passed": 45,
   "checks": {
@@ -18,13 +18,30 @@
     "verified_at": null
   },
   "blockers": [
-    "Configurar META_APP_SECRET diretamente no Railway e confirmar callback na Meta",
-    "Autorizar @gutoexpress no login unificado",
+    "Concluir autorização Meta de @gutoexpress no portfólio 2491098791119160 e validar token e conta pela API",
     "Vincular plugin ao ChatGPT com callback OAuth exato",
-    "Revisar materiais oficiais e confirmar criação e publicação agendada"
+    "Revisar materiais oficiais e confirmar criação e publicação agendada autorizada"
   ],
   "completion_rule": "ready=true somente após todas as verificações reais, evidências e confirmação de uma publicação autorizada; testes simulados e healthcheck não bastam",
   "meta_app_id": "4841713669443386",
   "meta_config_id": "2135916773978596",
-  "meta_login_mode": "unified"
+  "meta_login_mode": "unified",
+  "meta_business_id": "2491098791119160",
+  "last_checked_at": "2026-11-16T23:18:36.542Z",
+  "operational_evidence": {
+    "deployment": {
+      "id": "b140181e-62d3-42aa-9d89-2bef812a8cef",
+      "status": "SUCCESS",
+      "commit": "b4b5792532974d07e25db76baab5460e4443e79b",
+      "verified_at": "2026-11-16T23:18:36.542Z"
+    },
+    "business_suite": {
+      "business_id": "2491098791119160",
+      "page_asset_id": "277945428724850",
+      "visible_instagram_username": "gutoexpress",
+      "url": "https://business.facebook.com/latest/home?business_id=2491098791119160&asset_id=277945428724850",
+      "verified_at": "2026-11-16T23:18:36.542Z",
+      "note": "Vínculo visível no painel; não comprova autorização API do aplicativo."
+    }
+  }
 }
