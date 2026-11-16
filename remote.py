@@ -35,8 +35,8 @@ def login():
 
 def page(body,status=200):
     return HTMLResponse('<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Guto Express Social</title><body><main><h1>Guto Express Social</h1>'+body+'</main></body></html>',status_code=status,
-        headers={'Cache-Control':'no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff',
-                 'Content-Security-Policy':"default-src 'none'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"})
+        headers={'Cache-Control':'no-store','Referrer-Policy':'same-origin','X-Content-Type-Options':'nosniff',
+                 'Content-Security-Policy':"default-src 'none'; form-action 'self' https://www.facebook.com https://chatgpt.com; frame-ancestors 'none'; base-uri 'none'"})
 
 
 def owner_form(action,nonce,extra=''):
