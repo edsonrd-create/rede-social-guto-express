@@ -36,7 +36,11 @@ def status_integracao() -> dict:
     result=queue.status()
     if os.getenv('REMOTE_MODE')=='true':
         result['meta_configured']=all(os.getenv(k) for k in ['META_APP_ID','META_APP_SECRET','META_GRAPH_VERSION'])
-        result['meta_authorized']=store.get('meta','gutoexpress') is not None
+        record=store.get('meta','gutoexpress')
+        result['meta_authorized']=bool(record and (os.getenv('META_LOGIN_MODE')!='unified' or record.get('provider')=='unified'))
+        result['meta_login_mode']=os.getenv('META_LOGIN_MODE','instagram')
+        result['token_expires_at']=record.get('expires_at') if record else None
+        result['token_renewal']='Nova autorização antes do vencimento; sem refresh automático SUAT.'
     else:
         result['meta_configured']=all(os.getenv(k) for k in ['META_ACCESS_TOKEN','META_GRAPH_VERSION','INSTAGRAM_ACCOUNT_ID'])
         result['meta_authorized']=result['meta_configured']
