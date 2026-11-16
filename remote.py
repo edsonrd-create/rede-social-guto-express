@@ -4,6 +4,7 @@ import hmac
 import logging
 import os
 import secrets
+import re
 from urllib.parse import urlsplit
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -16,6 +17,16 @@ from server import mcp, queue, owner, store
 logging.getLogger('httpx').setLevel(logging.WARNING)
 logging.getLogger('httpcore').setLevel(logging.WARNING)
 base=os.environ['PUBLIC_BASE_URL']
+
+
+def meta_configuration_issues():
+    issues=[]
+    for name in ('META_APP_ID','META_CONFIG_ID','META_BUSINESS_ID'):
+        if not os.getenv(name,'').isdigit(): issues.append(name)
+    if not os.getenv('META_APP_SECRET','').strip(): issues.append('META_APP_SECRET')
+    if not re.fullmatch(r'v\d+\.\d+',os.getenv('META_GRAPH_VERSION','')): issues.append('META_GRAPH_VERSION')
+    if os.getenv('META_LOGIN_MODE')!='unified': issues.append('META_LOGIN_MODE')
+    return issues
 
 
 def login():
@@ -82,16 +93,25 @@ async def consent(request:Request):
 
 @mcp.custom_route('/meta/start',methods=['POST'])
 async def meta_start(request:Request):
+    stage='form'
     try:
         values=await form(request)
         if not store.password_allowed() or not matches(values.get('password',''),owner.owner_hash):
             return page('<p>Autenticação recusada. Após muitas tentativas aguarde 15 minutos.</p>',403)
+        stage='configuration'
+        issues=meta_configuration_issues()
+        if issues:
+            logging.getLogger(__name__).warning('meta_start invalid_configuration fields=%s',','.join(issues))
+            return page('<p>Configuração ausente ou inválida no Railway: '+html.escape(', '.join(issues))+'. Corrija e abra /setup novamente.</p>',400)
+        stage='authorization_state'
         state,url=login().begin()
         response=RedirectResponse(url,303,headers={'Cache-Control':'no-store','Referrer-Policy':'no-referrer'})
         response.set_cookie('__Host-guto-meta',state,secure=True,httponly=True,samesite='lax',max_age=600,path='/')
         return response
-    except Exception:
-        return page('<p>Confira a configuração do aplicativo Meta e tente novamente.</p>',400)
+    except Exception as exc:
+        reference=secrets.token_hex(6)
+        logging.getLogger(__name__).error('meta_start failed reference=%s stage=%s type=%s',reference,stage,type(exc).__name__)
+        return page('<p>Não foi possível iniciar a conexão. Referência: '+reference+' ('+stage+'). Abra /setup novamente; se persistir, informe esta referência. Nenhum post foi publicado.</p>',400)
 
 
 @mcp.custom_route('/meta/callback',methods=['GET'])
