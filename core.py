@@ -176,16 +176,18 @@ class MetaPublisher:
         version=os.environ['META_GRAPH_VERSION']
         if os.getenv('TOKEN_ENCRYPTION_KEY'):
             from owner_auth import Store
-            from meta_login import InstagramLogin
+            from meta_login import configured_login
             store=Store(Queue(os.getenv('DATABASE_PATH','guto-social.sqlite3')),os.environ['TOKEN_ENCRYPTION_KEY'])
-            record=InstagramLogin(store,os.environ['PUBLIC_BASE_URL'],os.environ['META_APP_ID'],os.environ['META_APP_SECRET'],version).credentials()
+            record=configured_login(store,os.environ['PUBLIC_BASE_URL'],os.environ['META_APP_ID'],os.environ['META_APP_SECRET'],version).credentials()
             token=record['token'];self.account=record['account']
         else:
             token=os.environ['META_ACCESS_TOKEN']
             self.account=os.environ['INSTAGRAM_ACCOUNT_ID']
         if not re.fullmatch(r'v\d+\.\d+',version) or not self.account.isdigit():
             raise ValueError('Versão da API ou ID da conta inválido.')
-        self.base=f'https://graph.instagram.com/{version}'
+        self.unified=os.getenv('META_LOGIN_MODE')=='unified'
+        host='graph.facebook.com' if self.unified else 'graph.instagram.com'
+        self.base=f'https://{host}/{version}'
         self.client=client or httpx.Client(timeout=30, follow_redirects=False)
         self.headers={'Authorization':f'Bearer {token}'}
 
@@ -198,12 +200,13 @@ class MetaPublisher:
         return result
 
     def verify_account(self):
-        result=self.request('GET','me',params={'fields':'user_id,username'})
+        result=self.request('GET',self.account if self.unified else 'me',params={'fields':'id,username' if self.unified else 'user_id,username'})
         from meta_login import single
         result=single(result)
-        if result.get('username','').lower()!='gutoexpress' or str(result.get('user_id'))!=self.account:
+        account_id=result.get('id') if self.unified else result.get('user_id')
+        if result.get('username','').lower()!='gutoexpress' or str(account_id)!=self.account:
             raise ValueError('Conta autorizada difere de @gutoexpress.')
-        return {'id':result['user_id'],'username':result['username']}
+        return {'id':account_id,'username':result['username']}
 
     def validate_media(self, post):
         import io
