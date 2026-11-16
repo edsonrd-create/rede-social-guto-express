@@ -1,0 +1,27 @@
+{
+  "account": "gutoexpress",
+  "ready": false,
+  "deployed_commit": "a4eb0becb188f03b20185787c8e9c4ea7fb6eba0",
+  "deployment_verified": true,
+  "local_tests_passed": 38,
+  "checks": {
+    "meta_authorized": false,
+    "chatgpt_plugin_linked": false,
+    "official_assets_reviewed": false,
+    "end_to_end_creation_verified": false,
+    "scheduled_publication_confirmed": false
+  },
+  "evidence": {
+    "instagram_media_id": null,
+    "instagram_permalink": null,
+    "approved_content_sha256": null,
+    "verified_at": null
+  },
+  "blockers": [
+    "Autenticação do proprietário na Meta pendente",
+    "Configurar app Meta e autorizar conta profissional",
+    "Vincular plugin próprio ao ChatGPT com callback OAuth exato",
+    "Revisar materiais oficiais e validar criação e publicação agendada"
+  ],
+  "completion_rule": "ready=true somente após todas as verificações reais, evidências e confirmação de uma publicação autorizada; testes simulados e healthcheck não bastam"
+}
